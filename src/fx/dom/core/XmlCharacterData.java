@@ -9,8 +9,8 @@ public class XmlCharacterData extends XmlNode implements CharacterData {
 
   StringBuilder data;
 
-  protected XmlCharacterData(String name, short type, String data, Document owner) {
-    super(name,type,owner);
+  protected XmlCharacterData(String name, String data, Document owner) {
+    super(name,owner);
     setData(data);
   }
 

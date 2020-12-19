@@ -1,10 +1,11 @@
-package fx.dom.core;
+package fx.dom.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.Queue;
+import java.util.ArrayDeque;
 
 import javax.xml.stream.XMLResolver;
 import javax.xml.stream.events.DTD;
@@ -23,7 +24,7 @@ public class ScannerDT extends Scanner {
                 var in = xr.resolveEntity(publicId,systemId,baseURI,namespace);
                 if (in instanceof InputStream) {
                     var b = ((InputStream)in).readAllBytes();
-                    resolvedEntities.put(systemId,b);
+                    resolvedEntities.offer(b);
                     return new ByteArrayInputStream(b);
                 }
             } catch (IOException ignore) {}
@@ -31,14 +32,15 @@ public class ScannerDT extends Scanner {
         };
     }
 
-    Map<String,byte[]> resolvedEntities = new HashMap<>();
+    Queue<byte[]> resolvedEntities = new ArrayDeque<>();
 
     @Override
     protected void dtd(DTD d) {
         super.dtd(d);
         parseDecl(d.getDocumentTypeDeclaration());
-        for (var k:resolvedEntities.keySet()) {
-            parseDecl(new String(resolvedEntities.remove(k)));
+        byte[] b;
+        while ((b = resolvedEntities.poll()) != null) {
+            parseDecl(new String(b));
         }
     }
 
@@ -113,14 +115,26 @@ public class ScannerDT extends Scanner {
         var i = 2;
         while (i < s.length) {
             var aName = s[i++];
+            if (aName.charAt(0) == '%') {
+                continue; // skip internal (parsed) entities
+            }
             var type = s[i++];
-            //  mode
-            var value = s[i++];
-            attributeDeclaration(eName,aName,type,null,value);
+            var mode = s[i++];
+            String value = null;
+            switch (mode) {
+              case "#FIXED" -> { value = s[i++]; }
+              case "#IMPLIED", "#REQUIRED" -> {}
+              default -> { value = mode; mode = null;} 
+            }
+            attributeDeclaration(eName,aName,type,mode,value);
         }
     }
 
     protected void elementDeclaration(String name, String model) {}
     protected void attributeDeclaration(String eName, String aName, String type, String mode, String value) {}
+
+    // entities with '%' names
+    // void externalEntityDecl(String name, String publicId, String systemId) 
+    // void internalEntityDecl(String name, String value)
 
 }

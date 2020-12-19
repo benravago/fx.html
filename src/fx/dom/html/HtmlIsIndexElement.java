@@ -1,9 +1,15 @@
 package fx.dom.html;
+
+import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLFormElement;
 import org.w3c.dom.html.HTMLIsIndexElement;
-class HtmlIsIndexElement extends HtmlElement implements HTMLIsIndexElement {
 
-  @Override public HTMLFormElement getForm() { return null; }
-  @Override public String getPrompt() { return null; }
-  @Override public void setPrompt(String prompt) {}
+public class HtmlIsIndexElement extends HtmlElement implements HTMLIsIndexElement, Control {
+  protected HtmlIsIndexElement(HTMLDocument owner) { super(owner,"ISINDEX"); }
+
+  @Override public HTMLFormElement getForm() { return Control.form(this); }
+
+  @Override public String getPrompt() { return getAttribute("prompt"); }
+  @Override public void setPrompt(String prompt) { setAttribute("prompt",prompt); }
+
 }

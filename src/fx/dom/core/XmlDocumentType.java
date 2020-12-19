@@ -13,12 +13,14 @@ public class XmlDocumentType extends XmlNode implements DocumentType {
   XmlNamedNodeMap elements;
 
   protected XmlDocumentType(String name, Document owner) {
-    super(name,Node.DOCUMENT_TYPE_NODE,owner);
+    super(name,owner);
     this.entities = new XmlNamedNodeMap(this);
     this.notations = new XmlNamedNodeMap(this);
     this.elements = new XmlNamedNodeMap(this);
     immutable = true;
   }
+
+  @Override public short getNodeType() { return Node.DOCUMENT_TYPE_NODE; }
 
   @Override
   public Node cloneNode(boolean deep) throws DOMException {

@@ -1,11 +1,18 @@
 package fx.dom.html;
+
+import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLFormElement;
 import org.w3c.dom.html.HTMLLegendElement;
-class HtmlLegendElement extends HtmlElement implements HTMLLegendElement {
 
-  @Override public HTMLFormElement getForm() { return null; }
-  @Override public String getAccessKey() { return null; }
-  @Override public void setAccessKey(String accessKey) {}
-  @Override public String getAlign() { return null; }
-  @Override public void setAlign(String align) {}
+public class HtmlLegendElement extends HtmlElement implements HTMLLegendElement, Control {
+  protected HtmlLegendElement(HTMLDocument owner) { super(owner,"LEGEND"); }
+
+  @Override public HTMLFormElement getForm() { return Control.form(this); }
+
+  @Override public String getAccessKey() { return getAttribute("accesskey"); }
+  @Override public void setAccessKey(String accessKey) { setAttribute("accesskey",accessKey); }
+
+  @Override public String getAlign() { return getAttribute("align"); }
+  @Override public void setAlign(String align) { setAttribute("align",align); }
+
 }

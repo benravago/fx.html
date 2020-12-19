@@ -11,12 +11,14 @@ public class XmlEntity extends Parent implements Entity {
   String notationName;
 
   protected XmlEntity(String name, String publicId, String systemId, String notationName, Document owner) {
-    super(valid(name),Node.ENTITY_NODE,owner);
+    super(valid(name),owner);
     this.publicId = publicId;
     this.systemId = systemId;
     this.notationName = notationName;
     // immutable = true;  // let the loader set this
   }
+
+  @Override public short getNodeType() { return Node.ENTITY_NODE; }
 
   @Override
   boolean acceptable(Node child) {

@@ -1,13 +1,16 @@
 package fx.dom.core;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Node;
 
 public class XmlDocumentFragment extends Parent implements DocumentFragment {
 
-  protected XmlDocumentFragment(XmlDocument owner) {
-    super("#document-fragment",Node.DOCUMENT_FRAGMENT_NODE,owner);
+  protected XmlDocumentFragment(Document owner) {
+    super("#document-fragment",owner);
   }
+
+  @Override public short getNodeType() { return Node.DOCUMENT_FRAGMENT_NODE; }
 
   @Override
   boolean acceptable(Node child) {

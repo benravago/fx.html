@@ -11,13 +11,15 @@ public class XmlEntityReference extends XmlNode implements EntityReference {
   Node reference;
 
   protected XmlEntityReference(String name, Document owner) {
-    super(valid(name),Node.ENTITY_REFERENCE_NODE,owner);
+    super(valid(name),owner);
     immutable = true;
 
     var dtd = getOwnerDocument().getDoctype();
     if (dtd != null) reference = dtd.getEntities().getNamedItem(getNodeName());
     if (reference == null) reference = new Token("null",null,getOwnerDocument());
   }
+
+  @Override public short getNodeType() { return Node.ENTITY_REFERENCE_NODE; }
 
   @Override public Node appendChild(Node newChild) throws DOMException { return reference.appendChild(newChild); }
   @Override public Node cloneNode(boolean deep) throws DOMException { return getOwnerDocument().createEntityReference(getNodeName()); }

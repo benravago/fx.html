@@ -10,11 +10,13 @@ public class XmlNotation extends XmlNode implements Notation {
   String publicId, systemId;
 
   XmlNotation(String name, String publicId, String systemId, Document owner) {
-    super(name,Node.NOTATION_NODE,owner);
+    super(name,owner);
     this.publicId = publicId;
     this.systemId = systemId;
     immutable = true;
   }
+
+  @Override public short getNodeType() { return Node.NOTATION_NODE; }
 
   // DOM Level 1
   @Override public String getPublicId() { return publicId; }

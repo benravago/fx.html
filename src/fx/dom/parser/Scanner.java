@@ -1,4 +1,4 @@
-package fx.dom.core;
+package fx.dom.parser;
 
 import java.io.InputStream;
 
@@ -62,7 +62,7 @@ public class Scanner {
         var n = d.getNotations();
         if (n != null) for (var i:n) notationDeclaration(i);
         var e = d.getEntities();
-        if (e != null) for (var i:e) entityDeclaration(i);
+        if (e != null) for (var i:e) if (i.getName().charAt(0) != '%') entityDeclaration(i);
     }
 
     void text(Characters e) {

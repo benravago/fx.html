@@ -7,6 +7,12 @@ import org.w3c.dom.NodeList;
 
 public class XmlNodeList extends NamedItemList implements NodeList {
 
+  XmlNode owner;
+
+  XmlNodeList(XmlNode owner) {
+    this.owner = owner; // list 'owner' this is the 'parent' node
+  }
+
   Node append(Node node) {
     assert node instanceof XmlNode;
     insert(size,(XmlNode)node);
@@ -33,11 +39,16 @@ public class XmlNodeList extends NamedItemList implements NodeList {
     return node;
   }
 
-  static NodeList of(List<Node> list) {
+  public static NodeList of(List<Node> list) {
     return new NodeList() {
       @Override public int getLength() { return list.size(); }
       @Override public Node item(int index) { return list.get(index); }
     };
   }
+
+  public static final NodeList EMPTY = new NodeList() {
+    @Override public int getLength() { return  0; }
+    @Override public Node item(int index) { return null; }
+  };
 
 }

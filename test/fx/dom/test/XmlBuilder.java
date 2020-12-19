@@ -6,11 +6,11 @@ import java.util.function.Function;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
-import domts.DOMTestDocumentService;
+import domts.TestDocumentBuilder;
 
 import fx.dom.core.Builder;
 
-public class XmlBuilder implements DOMTestDocumentService {
+public class XmlBuilder implements TestDocumentBuilder {
 
     @Override public String getContentType() { return "text/xml"; }
     @Override public String getFileType() { return ".xml"; }

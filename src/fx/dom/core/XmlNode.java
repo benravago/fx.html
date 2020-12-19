@@ -12,17 +12,14 @@ import org.w3c.dom.UserDataHandler;
 
 public class XmlNode extends NamedItem implements Node {
 
-  short nodeType;
   Document ownerDocument;
-  Node parentNode;
   boolean immutable = false;
 
-  protected XmlNode(String nodeName, short nodeType, Document ownerDocument) {
+  protected XmlNode(String nodeName, Document ownerDocument) {
     if (nodeName == null) {
       throw new DOMException(DOMException.INVALID_CHARACTER_ERR,nodeName);
     }
     this.nodeName = nodeName;
-    this.nodeType = nodeType;
     this.ownerDocument = ownerDocument;
   }
 
@@ -58,15 +55,15 @@ public class XmlNode extends NamedItem implements Node {
   @Override public Node appendChild(Node newChild) throws DOMException { throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,""); }
   @Override public Node cloneNode(boolean deep) { throw new DOMException(DOMException.NOT_SUPPORTED_ERR,""); }
   @Override public NamedNodeMap getAttributes() { return null; }
-  @Override public NodeList getChildNodes() { return new XmlNodeList(); }
+  @Override public NodeList getChildNodes() { return XmlNodeList.EMPTY; }
   @Override public Node getFirstChild() { return null; }
   @Override public Node getLastChild() { return null; }
   @Override public Node getNextSibling() { return list != null ? sibling(1) : null; }
   @Override public String getNodeName() { return nodeName; }
-  @Override public short getNodeType() { return nodeType; }
+  @Override public short getNodeType() { return -1; }
   @Override public String getNodeValue() throws DOMException { return null; }
   @Override public Document getOwnerDocument() { return ownerDocument; }
-  @Override public Node getParentNode() { return parentNode; }
+  @Override public Node getParentNode() { return list != null ? ((XmlNodeList)list).owner : null; }
   @Override public Node getPreviousSibling() { return list != null ? sibling(-1) : null; }
   @Override public boolean hasChildNodes() { return false; }
   @Override public Node insertBefore(Node newChild, Node refChild) throws DOMException { throw new DOMException(DOMException.HIERARCHY_REQUEST_ERR,""); }

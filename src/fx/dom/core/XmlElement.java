@@ -2,6 +2,7 @@ package fx.dom.core;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -17,10 +18,12 @@ public class XmlElement extends Parent implements Element {
   XmlNamedNodeMap attributes;
 
   protected XmlElement(String tagName, Document owner) {
-    super(valid(tagName),Node.ELEMENT_NODE,owner);
+    super(valid(tagName),owner);
     attributes = new XmlNamedNodeMap(this);
     setDefaultAttributes();
   }
+
+  @Override public short getNodeType() { return Node.ELEMENT_NODE; }
 
   @Override
   boolean acceptable(Node child) {
@@ -62,12 +65,16 @@ public class XmlElement extends Parent implements Element {
 
   @Override
   public NodeList getElementsByTagName(String name) {
-    return byTag(childNodes,name);
+    return byName(childNodes,name);
   }
-
-  static NodeList byTag(NamedItemList children, String name) {
+  
+  static NodeList byName(NamedItemList children, String name) {
+    return byTagName(children,name::equals);  
+  }
+  
+  protected static NodeList byTagName(NamedItemList children, Predicate<String> m) {
     var list = new ArrayList<Node>();
-    walk(children, e -> { if (e.getTagName().equals(name)) list.add(e); });
+    walk(children, e -> { if (m.test(e.getTagName())) list.add(e); });
     return XmlNodeList.of(list);
   }
 

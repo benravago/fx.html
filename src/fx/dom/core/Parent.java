@@ -3,14 +3,13 @@ package fx.dom.core;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-abstract class Parent extends XmlNode {
+public abstract class Parent extends XmlNode {
 
-  XmlNodeList childNodes;
+  protected XmlNodeList childNodes;
 
-  Parent(String nodeName, short nodeType, Document owner) {
-    super(nodeName,nodeType,owner);
+  Parent(String name, Document owner) {
+    super(name,owner);
     resetChildNodes();
   }
 
@@ -21,11 +20,6 @@ abstract class Parent extends XmlNode {
     }
     var i = (NamedItem) newChild;
     if (i.list != null) XmlNodeList.unlink(i);
-    return newChild;
-  }
-
-  Node accept(Node newChild) {
-    ((XmlNode)newChild).parentNode = this;
     return newChild;
   }
 
@@ -46,12 +40,12 @@ abstract class Parent extends XmlNode {
   }
 
   @Override
-  public NodeList getChildNodes() {
+  public XmlNodeList getChildNodes() {
     return childNodes;
   }
 
   final void resetChildNodes() {
-    childNodes = new XmlNodeList();
+    childNodes = new XmlNodeList(this);
   }
 
   @Override
@@ -68,16 +62,16 @@ abstract class Parent extends XmlNode {
   // TODO: when newChild is a DocumentFragment,
   //       how to apply the block of fragment elements?
   //       applies to appendChild(), insertBefore() and replaceChild()
-  
+
   @Override
   public Node appendChild(Node newChild) throws DOMException {
-    return accept(childNodes.append(release(newChild)));
+    return childNodes.append(release(newChild));
   }
 
   @Override
   public Node insertBefore(Node newChild, Node refChild) throws DOMException {
     return refChild != null
-      ? accept(childNodes.insert(release(newChild),refChild))
+      ? childNodes.insert(release(newChild),refChild)
       : appendChild(newChild);
   }
 
@@ -87,7 +81,7 @@ abstract class Parent extends XmlNode {
       throw new DOMException(DOMException.NO_MODIFICATION_ALLOWED_ERR,"");
     }
     return newChild != null
-      ? accept(childNodes.replace(release(newChild),oldChild))
+      ? childNodes.replace(release(newChild),oldChild)
       : removeChild(oldChild);
   }
 
@@ -97,7 +91,6 @@ abstract class Parent extends XmlNode {
     if (!childNodes.remove(oldChild)) {
       throw new DOMException(DOMException.NOT_FOUND_ERR,"");
     }
-    ((XmlNode)oldChild).parentNode = null;
     return oldChild;
   }
 

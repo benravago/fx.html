@@ -7,8 +7,14 @@ import fx.dom.core.XmlDOM;
 
 public class HtmlDOM extends XmlDOM implements HTMLDOMImplementation {
 
-    @Override
-    public HTMLDocument createHTMLDocument(String title) {
-        return null;
+  @Override
+  public HTMLDocument createHTMLDocument(String title) {
+    if (title == null) {
+      throw new NullPointerException("Argument 'title' is null.");
     }
+    var doc = new HtmlDocument();
+    doc.setTitle(title);
+    return doc;
+  }
+
 }

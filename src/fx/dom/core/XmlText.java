@@ -7,13 +7,15 @@ import org.w3c.dom.Text;
 
 public class XmlText extends XmlCharacterData implements Text {
 
-  XmlText(String name, short type, String data, Document owner) {
-    super(name,type,data,owner);
+  XmlText(String name, String data, Document owner) {
+    super(name,data,owner);
   }
 
   XmlText(String data, Document owner) {
-    this("#text",Node.TEXT_NODE,data,owner);
+    this("#text",data,owner);
   }
+
+  @Override public short getNodeType() { return Node.TEXT_NODE; }
 
   void normalizeText() {
     Node n;

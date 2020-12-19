@@ -9,8 +9,8 @@ public class XmlDOM implements DOMImplementation {
 
   // DOM Level 1
   @Override public boolean hasFeature(String feature, String version) { return false; }
-	
-  // DOM Level 2	
+
+  // DOM Level 2
   @Override public Document createDocument(String namespaceURI, String qualifiedName, DocumentType doctype) throws DOMException { return null; }
   @Override public DocumentType createDocumentType(String qualifiedName, String publicId, String systemId) throws DOMException { return null; }
   @Override public Object getFeature(String feature, String version) { return null; }

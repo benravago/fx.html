@@ -14,9 +14,11 @@ public class XmlAttr extends Parent implements Attr {
   boolean specified;
 
   protected XmlAttr(String name, Document owner) {
-    super(valid(name),Node.ATTRIBUTE_NODE,owner);
+    super(valid(name),owner);
     specified = false;
   }
+
+  @Override public short getNodeType() { return Node.ATTRIBUTE_NODE; }
 
   @Override
   boolean acceptable(Node child) {
@@ -63,9 +65,9 @@ public class XmlAttr extends Parent implements Attr {
       throw new DOMException(DOMException.INUSE_ATTRIBUTE_ERR,"");
     }
   }
-  
+
   private Node owner() { return super.getParentNode(); }
-  
+
   @Override public Node getParentNode() { return null; }
 
   @Override public Node getNextSibling() { return null; }

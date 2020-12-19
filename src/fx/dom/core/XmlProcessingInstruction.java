@@ -8,8 +8,10 @@ import org.w3c.dom.ProcessingInstruction;
 public class XmlProcessingInstruction extends XmlCharacterData implements ProcessingInstruction {
 
   XmlProcessingInstruction(String target, String data, Document owner) {
-    super(valid(target),Node.PROCESSING_INSTRUCTION_NODE,data,owner);
+    super(valid(target),data,owner);
   }
+
+  @Override public short getNodeType() { return Node.PROCESSING_INSTRUCTION_NODE; }
 
   // DOM Level 1
   @Override public String getTarget() { return getNodeName(); }

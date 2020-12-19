@@ -19,9 +19,11 @@ import org.w3c.dom.Text;
 public class XmlDocument extends Parent implements Document {
 
   protected XmlDocument(String root) {
-    super("#document",Node.DOCUMENT_NODE,null);
+    super("#document",null);
     if (root != null) appendChild(createElement(root));
   }
+
+  @Override public short getNodeType() { return Node.DOCUMENT_NODE; }
 
   @Override
   boolean acceptable(Node child) {
@@ -46,12 +48,12 @@ public class XmlDocument extends Parent implements Document {
   @Override public Text createTextNode(String data) { return new XmlText(data,this); }
 
   @Override public DOMImplementation getImplementation() { return new XmlDOM(); }
-  @Override public NodeList getElementsByTagName(String tagname) { return XmlElement.byTag(childNodes,tagname); }
+  @Override public NodeList getElementsByTagName(String tagname) { return XmlElement.byName(childNodes,tagname); }
 
-  @Override public DocumentType getDoctype() { return (DocumentType) getUnique(DocumentType.class); }
-  @Override public Element getDocumentElement() { return (Element) getUnique(Element.class); }
+  @Override public DocumentType getDoctype() { return (DocumentType) get(DocumentType.class); }
+  @Override public Element getDocumentElement() { return (Element) get(Element.class); }
 
-  Node getUnique(Class<?> type) {
+  Node get(Class<?> type) {
     for (var n : childNodes) {
       if (type.isInstance(n)) return n;
     }

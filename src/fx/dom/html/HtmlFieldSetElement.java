@@ -1,7 +1,11 @@
 package fx.dom.html;
+
+import org.w3c.dom.html.HTMLDocument;
 import org.w3c.dom.html.HTMLFieldSetElement;
 import org.w3c.dom.html.HTMLFormElement;
-class HtmlFieldSetElement extends HtmlElement implements HTMLFieldSetElement {
 
-  @Override public HTMLFormElement getForm() { return null; }
+public class HtmlFieldSetElement extends HtmlElement implements HTMLFieldSetElement, Control {
+  protected HtmlFieldSetElement(HTMLDocument owner) { super(owner,"FIELDSET"); }
+
+  @Override public HTMLFormElement getForm() { return Control.form(this); }
 }

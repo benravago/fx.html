@@ -29,13 +29,11 @@ class Token extends XmlNode {
   String value;
 
   Token(String name, String value, Document owner) {
-    super(name,NODETYPE,owner);
+    super(name,owner);
     this.value = value;
   }
 
-  @Override
-  public String getNodeValue() {
-    return value;
-  }
+  @Override public short getNodeType() { return NODETYPE; }
+  @Override public String getNodeValue() { return value; }
 
 }
